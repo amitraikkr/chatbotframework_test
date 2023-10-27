@@ -1,0 +1,95 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  chatbotframework
+
+  Sample SAM Template for chatbotframework
+
+Globals:
+  Function:
+    Timeout: 120
+    MemorySize: 128
+
+Resources:
+  ChatbotWorldFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: chatbot_world/
+      Handler: app.lambda_handler
+      Runtime: python3.11
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref ChatbotLibLayer
+      Policies:
+        - !Ref SecretsManagerReadPolicy
+        - !Ref DynamoDBCrudPolicy
+      Events:
+        ChatbotWorld:
+          Type: Api 
+          Properties:
+            Path: /Chatbot
+            Method: post
+
+  SecretsManagerReadPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows lambda function to read secrets from Secrets Manager
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: secretsmanager:GetSecretValue
+            Resource:  ######"YourSecretArnHere"
+
+  DynamoDBCrudPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Allows lambda function to perform CRUD operations on DynamoDB
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:PutItem
+              - dynamodb:GetItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+              - dynamodb:Query
+              - dynamodb:Scan
+            Resource: !GetAtt ChatContextTable.Arn            
+
+  ChatbotLibLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties: 
+      LayerName: "chatbot-lib-layer"
+      Description: "Layer for chatbot libraries"
+      ContentUri: lib_layer/python/site-packages/
+      CompatibleRuntimes: 
+        - python3.11
+      RetentionPolicy: Retain
+
+  ChatContextTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "ChatContextTable"
+      AttributeDefinitions:
+        - AttributeName: "user_id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "user_id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+Outputs:
+  ChatbotWorldApi:
+    Description: "API Gateway endpoint URL for Prod stage for Chatbot World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/Chatbot/"
+  ChatbotWorldFunction:
+    Description: "Chatbot World Lambda Function ARN"
+    Value: !GetAtt ChatbotWorldFunction.Arn
+  ChatbotWorldFunctionIamRole:
+    Description: "Implicit IAM Role created for Chatbot World function"
+    Value: !GetAtt ChatbotWorldFunctionRole.Arn

@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./samtestingapp/lib_layer/python",
+        "./samtestingapp/lib_layer/python/site-packages"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "agent_config": {
+        "model": "gpt-3.5-turbo",
+        "max_tokens": 150,
+        "temperature": 0.7,
+        "top_p": 1.0,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0,
+        "secret_key_name":"GPT_API_KEY",
+        "secret_name":"prod/chatbot/secrectname"
+    },
+    "max_msg_limit": 100,
+    "table_name": "ChatContextTable",        
+    "region_name": "us-east-2",
+    "system_prompt": "You are an informed and adept Study Abroad Assistant. Your purpose is to guide students through the intricate process of studying abroad. You provide insights about colleges, courses, immigration processes, and detailed information about countries and cities. Your role is to assist students in understanding the various aspects of international education, answering their questions with accurate and insightful responses. You maintain a friendly and respectful demeanor, understanding the importance and significance of the choices students are making."
+}

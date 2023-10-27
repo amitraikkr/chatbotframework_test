@@ -1,0 +1,31 @@
+# .samignore
+
+# Ignore all .log and .temp files
+*.log
+*.temp
+
+# Exclude test directories
+**/test/
+**/tests/
+**/__tests__/
+
+
+# Ignore all __pycache__ directories
+**/__pycache__/
+*.pyc
+
+# Ignore node modules (if using Node.js)
+**/node_modules/
+
+# Ignore virtual environments (if using Python)
+venv/
+*.venv/
+
+# Ignore IDE specific files/directories
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# Ignore build artifacts
+.aws-sam/
