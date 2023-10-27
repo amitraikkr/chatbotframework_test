@@ -35,7 +35,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action: secretsmanager:GetSecretValue
-            Resource: arn:aws:secretsmanager:us-east-2:868658902285:secret:prod/chatbot/secrectname-xPgLfu
+            Resource: ## add your secret arn
 
   DynamoDBCrudPolicy:
     Type: AWS::IAM::ManagedPolicy
