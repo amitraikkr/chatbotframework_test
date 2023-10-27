@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  chatbotframework
+  samtestingapp
 
-  Sample SAM Template for chatbotframework
+  Sample SAM Template for samtestingapp
 
 Globals:
   Function:
@@ -24,12 +24,7 @@ Resources:
       Policies:
         - !Ref SecretsManagerReadPolicy
         - !Ref DynamoDBCrudPolicy
-      Events:
-        ChatbotWorld:
-          Type: Api 
-          Properties:
-            Path: /Chatbot
-            Method: post
+        - AWSLambdaBasicExecutionRole  # Added this for CloudWatch Logs permissions.
 
   SecretsManagerReadPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -40,7 +35,7 @@ Resources:
         Statement:
           - Effect: Allow
             Action: secretsmanager:GetSecretValue
-            Resource:  ######"YourSecretArnHere"
+            Resource: arn:aws:secretsmanager:us-east-2:868658902285:secret:prod/chatbot/secrectname-xPgLfu
 
   DynamoDBCrudPolicy:
     Type: AWS::IAM::ManagedPolicy
@@ -79,14 +74,9 @@ Resources:
       KeySchema:
         - AttributeName: "user_id"
           KeyType: "HASH"
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+      BillingMode: PAY_PER_REQUEST  # Set to On-Demand capacity.
 
 Outputs:
-  ChatbotWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Chatbot World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/Chatbot/"
   ChatbotWorldFunction:
     Description: "Chatbot World Lambda Function ARN"
     Value: !GetAtt ChatbotWorldFunction.Arn

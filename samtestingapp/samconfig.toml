@@ -17,8 +17,8 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-stack_name = "chatbotworldv5"
-s3_prefix = "chatbotworldv5"
+stack_name = "chatbotworldv6"
+s3_prefix = "chatbotworldv6"
 region = "us-east-2"
 image_repositories = []
 
